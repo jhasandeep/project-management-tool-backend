@@ -1,10 +1,9 @@
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "installCommand": "npm install",
   "builds": [
     {
-      "src": "src/server.ts",
+      "src": "api/server.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": ["dist/**"]
@@ -13,9 +12,19 @@
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "api/server.js"
+    },
+    {
       "src": "/(.*)",
-      "dest": "src/server.ts"
+      "dest": "api/server.js"
     }
-  ]
+  ],
+  "functions": {
+    "api/server.js": {
+      "maxDuration": 30
+    }
+  }
 }
+
 
