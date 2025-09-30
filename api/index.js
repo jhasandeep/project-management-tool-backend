@@ -1,52 +1,31 @@
-// Simple Express API for Vercel
-const express = require('express');
-const cors = require('cors');
+import { NestFactory } from '@nestjs/core';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import { AppModule } from '../src/app.module';
+import { ValidationPipe } from '@nestjs/common';
+import express from 'express';
 
-const app = express();
+let cachedApp: any;
 
-app.use(cors());
-app.use(express.json());
-
-// Basic routes
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Project Management API v1.0',
-    status: 'success',
-    timestamp: new Date().toISOString()
-  });
-});
-
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'healthy',
-    uptime: process.uptime(),
-    version: '1.0.0'
-  });
-});
-
-// Project routes (placeholder)
-app.get('/api/projects', (req, res) => {
-  res.json({
-    message: 'Projects endpoint',
-    data: [],
-    total: 0
-  });
-});
-
-app.post('/api/projects', (req, res) => {
-  res.json({
-    message: 'Project created successfully',
-    data: req.body,
-    id: Date.now()
-  });
-});
-
-app.use('*', (req, res) => {
-  res.status(404).json({
-    error: 'Route not found',
-    path: req.originalUrl
-  });
-});
-
-module.exports = app;
-
+export default async function handler(req: any, res: any) {
+  if (!cachedApp) {
+    const expressApp = express();
+    const app = await NestFactory.create(
+      AppModule,
+      new ExpressAdapter(expressApp),
+    );
+    
+    app.enableCors({
+      origin: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
+    });
+    
+    // No global prefix needed with API directory approach
+    app.useGlobalPipes(new ValidationPipe());
+    await app.init();
+    cachedApp = expressApp;
+  }
+  
+  return cachedApp(req, res);
+}
