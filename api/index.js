@@ -41,11 +41,11 @@ app.post('/api/projects', (req, res) => {
   });
 });
 
-app.use('*', (req, res) => {
-  res.status(404).json({
-    error: 'Route not found',
-    path: req.originalUrl
-  });
-});
+// app.use('*', (req, res) => {
+//   res.status(404).json({
+//     error: 'Route not found',
+//     path: req.originalUrl
+//   });
+// });
 
 module.exports = app;
