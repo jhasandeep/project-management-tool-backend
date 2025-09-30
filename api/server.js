@@ -1,35 +1,41 @@
-// api/server.js
+const { NestFactory } = require('@nestjs/core');
+const { ExpressAdapter } = require('@nestjs/platform-express');
 const express = require('express');
-const cors = require('cors');
 
-const app = express();
+// Import your compiled AppModule
+const { AppModule } = require('../dist/app.module');
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+const server = express();
+let app;
 
-// Routes
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Project Management Tool Backend API',
-    status: 'success',
-    timestamp: new Date().toISOString()
-  });
-});
+async function createNestServer(expressInstance) {
+  if (!app) {
+    app = await NestFactory.create(
+      AppModule,
+      new ExpressAdapter(expressInstance),
+      {
+        logger: ['error', 'warn'],
+      }
+    );
 
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'healthy',
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString()
-  });
-});
+    // Enable CORS
+    app.enableCors({
+      origin: [
+        'http://localhost:3000',
+        'https://your-frontend.vercel.app'
+      ],
+      credentials: true,
+    });
 
-app.use('*', (req, res) => {
-  res.status(404).json({
-    message: 'Route not found',
-    status: 'error'
-  });
-});
+    // Set global prefix
+    app.setGlobalPrefix('api');
 
-module.exports = app;
+    await app.init();
+  }
+  return app;
+}
+
+module.exports = async (req, res) => {
+  await createNestServer(server);
+  server(req, res);
+};
