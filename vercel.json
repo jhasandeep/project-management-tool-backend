@@ -1,26 +1,11 @@
-
-
-
 {
   "version": 2,
-   "buildCommand": "npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": ".",
- 
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "src/main.ts",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "OPTIONS",
-        "DELETE",
-        "HEAD",
-        "CONNECT",
-        "TRACE"
-      ]
+      "source": "/(.*)",
+      "destination": "/api"
     }
   ]
 }
