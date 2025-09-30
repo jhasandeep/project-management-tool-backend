@@ -1,13 +1,9 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
   "builds": [
     {
       "src": "api/server.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["dist/**"]
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -19,12 +15,8 @@
       "src": "/(.*)",
       "dest": "api/server.js"
     }
-  ],
-  "functions": {
-    "api/server.js": {
-      "maxDuration": 30
-    }
-  }
+  ]
 }
+
 
 
