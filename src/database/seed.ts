@@ -65,7 +65,7 @@ async function seed() {
         title: "Design mockups",
         description: "Create wireframes and mockups for the new website design",
         status: TaskStatus.DONE,
-        dueDate: "2024-01-15",
+        dueDate: "2025-10-15",
       },
       testUser._id.toString()
     );
@@ -76,7 +76,7 @@ async function seed() {
         title: "Frontend development",
         description: "Implement the frontend using React and TypeScript",
         status: TaskStatus.IN_PROGRESS,
-        dueDate: "2024-02-01",
+        dueDate: "2025-10-25",
       },
       testUser._id.toString()
     );
@@ -88,7 +88,7 @@ async function seed() {
         description:
           "Connect frontend with backend APIs and implement data fetching",
         status: TaskStatus.TODO,
-        dueDate: "2024-02-15",
+        dueDate: "2025-10-15",
       },
       testUser._id.toString()
     );
@@ -103,7 +103,7 @@ async function seed() {
         description:
           "Plan the overall architecture and technology stack for the mobile app",
         status: TaskStatus.DONE,
-        dueDate: "2024-01-10",
+        dueDate: "2025-10-15",
       },
       testUser._id.toString()
     );
@@ -115,7 +115,7 @@ async function seed() {
         description:
           "Design user interface and user experience for mobile screens",
         status: TaskStatus.IN_PROGRESS,
-        dueDate: "2024-01-25",
+        dueDate: "2025-10-25",
       },
       testUser._id.toString()
     );
@@ -126,7 +126,7 @@ async function seed() {
         title: "Development setup",
         description: "Set up development environment and project structure",
         status: TaskStatus.TODO,
-        dueDate: "2024-02-05",
+        dueDate: "2025-10-15",
       },
       testUser._id.toString()
     );
