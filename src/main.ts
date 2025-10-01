@@ -1,23 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import * as express from 'express'; // use * as express NOT import express from 'express'
-import { Request, Response } from 'express';
 
-let cachedServer: express.Express | undefined;
+const express = require('express'); // Use require() instead of import for express
 
-async function bootstrap(): Promise<express.Express> {
+let cachedServer: any;
+
+async function bootstrap() {
   if (!cachedServer) {
-    const server = express();
-    const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+    const expressApp = express(); // This will now work
+    const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
     app.enableCors();
     await app.init();
-    cachedServer = server;
+    cachedServer = expressApp;
   }
   return cachedServer;
 }
 
-export default async (req: Request, res: Response) => {
+export default async (req: any, res: any) => {
   const server = await bootstrap();
-  return (server as any)(req, res); // use as any to allow function-like invocation
+  return server(req, res);
 };
