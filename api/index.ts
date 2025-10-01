@@ -1,7 +1,20 @@
-/**
- * This file exports Express instance for specifically for the deployment of the app on Vercel.
- */
+import { NestFactory } from '@nestjs/core';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import { AppModule } from '../src/app.module';
+import * as express from 'express';
 
-import { AppFactory } from '../src/AppFactory.js';
+const server = express();
 
-export default AppFactory.create().expressApp;
+export default async (req, res) => {
+  if (!server.locals.app) {
+    const app = await NestFactory.create(
+      AppModule,
+      new ExpressAdapter(server)
+    );
+    app.enableCors();
+    await app.init();
+    server.locals.app = app;
+  }
+  
+  return server(req, res);
+};
